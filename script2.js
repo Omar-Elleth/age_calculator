@@ -1,24 +1,32 @@
+// Define Variables
 const inputElements = document.querySelectorAll(".card__input");
 const submitButton = document.querySelector(".card__button");
 
+// Validate Day
 const validateDay = (day) => {
   if (day && day > 0 && day <= 31) {
     return true;
   }
 };
+
+// Validate Month
 const validateMonth = (month) => {
   if (month && month > 0 && month <= 12) {
     return true;
   }
 };
+
+// Validate Year
 const validateYear = (year) => {
-  currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
+
   if (year && year > 0 && year <= currentYear) {
     return true;
   }
 };
 
-const isDateValid = (dayElement, monthElement, yearElement) => {
+// Check Validation of Date
+const isDateValid = (dayElement, MonthElement, yearElement) => {
   let isValid = [false, false, false];
 
   if (!validateDay(dayElement.value)) {
@@ -27,12 +35,14 @@ const isDateValid = (dayElement, monthElement, yearElement) => {
     isValid[0] = true;
     dayElement.classList.remove("card__input--error");
   }
-  if (!validateMonth(monthElement.value)) {
-    monthElement.classList.add("card__input--error");
+
+  if (!validateMonth(MonthElement.value)) {
+    MonthElement.classList.add("card__input--error");
   } else {
     isValid[1] = true;
-    monthElement.classList.remove("card__input--error");
+    MonthElement.classList.remove("card__input--error");
   }
+
   if (!validateYear(yearElement.value)) {
     yearElement.classList.add("card__input--error");
   } else {
@@ -43,11 +53,12 @@ const isDateValid = (dayElement, monthElement, yearElement) => {
   return isValid.every((item) => item === true);
 };
 
+// Function for calculte age
 const calculateAge = (year, month, day) => {
   const today = new Date();
   const birthdate = new Date(year, month - 1, day);
   let age = today.getFullYear() - birthdate.getFullYear();
-  const monthDiff = birthdate.getMonth() - today.getMonth();
+  const monthDiff = today.getMonth() - birthdate.getMonth();
 
   if (
     monthDiff < 0 ||
@@ -55,25 +66,29 @@ const calculateAge = (year, month, day) => {
   ) {
     age--;
   }
+
   return age;
 };
 
+// Function for Click Button
 const onClickHandler = () => {
-  const dayElement = document.querySelector(".card__input[name = 'day']");
-  const monthElement = document.querySelector(".card__input[name = 'month']");
-  const yearElement = document.querySelector(".card__input[name = 'year']");
+  const dayElement = document.querySelector(".card__input[name='day']");
+  const MonthElement = document.querySelector(".card__input[name='month']");
+  const yearElement = document.querySelector(".card__input[name='year']");
   const resultElement = document.querySelector(".card__resultValue");
 
-  if (!isDateValid(dayElement, monthElement, yearElement)) {
+  if (!isDateValid(dayElement, MonthElement, yearElement)) {
     resultElement.textContent = "--";
     return;
   }
 
-  resultElement.textContent = calculateAge(
+  const result = calculateAge(
     yearElement.value,
-    monthElement.value,
+    MonthElement.value,
     dayElement.value
   );
+
+  resultElement.textContent = result;
 };
 
 inputElements.forEach((item) => {
